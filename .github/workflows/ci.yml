@@ -1,0 +1,80 @@
+name: GoLa checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go: ['1.26.x', '1.27.x']
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
+        with:
+          go-version: ${{ matrix.go }}
+          cache: false
+      - name: Formatting
+        run: test -z "$(gofmt -l .)"
+      - run: go test ./...
+      - run: go test -race ./...
+      - run: go vet ./...
+      - name: Parser fuzz smoke checks
+        run: |
+          go test -run='^$' -fuzz=FuzzRouterPath -fuzztime=5s .
+          go test -run='^$' -fuzz=FuzzTrustedProxyParsing -fuzztime=5s .
+          go test -run='^$' -fuzz=FuzzBindingJSON -fuzztime=5s .
+          go test -run='^$' -fuzz=FuzzBindingValues -fuzztime=5s .
+          go test -run='^$' -fuzz=FuzzMultipart -fuzztime=5s .
+          go test -run='^$' -fuzz=FuzzFilePath -fuzztime=5s .
+          go test -run='^$' -fuzz=FuzzFileAttachment -fuzztime=5s .
+          go test -run='^$' -fuzz=FuzzXMLBinding -fuzztime=5s .
+          go test -run='^$' -fuzz=FuzzSSEFraming -fuzztime=5s .
+          go test -run='^$' -fuzz=FuzzCORSDeniedOrigin -fuzztime=5s ./middleware/cors
+          go test -run='^$' -fuzz=FuzzAcceptEncoding -fuzztime=5s ./middleware/compress
+      - run: go test -run='^$' -bench=. -benchtime=100ms -benchmem ./...
+      - name: Cross-framework benchmark module
+        working-directory: benchmarks
+        run: |
+          go mod verify
+          go test ./...
+          go test -race ./...
+          go vet ./...
+          go test -run='^$' -bench=. -benchtime=100ms -benchmem ./...
+      - name: Vulnerability check
+        if: matrix.go == '1.27.x'
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@v1.8.0
+          govulncheck -test -show verbose ./...
+          cd benchmarks
+          govulncheck -test -show verbose ./...
+  extensions:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go: ['1.26.x', '1.27.x']
+        module: ['contrib/otel', 'examples/websocket']
+    defaults:
+      run:
+        working-directory: ${{ matrix.module }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
+        with:
+          go-version: ${{ matrix.go }}
+          cache: false
+      - run: go mod verify
+      - run: go test -race ./...
+      - run: go vet ./...
+      - name: Vulnerability check
+        if: matrix.go == '1.27.x'
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@v1.8.0
+          govulncheck -test -show verbose ./...

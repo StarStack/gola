@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="97" height="24" role="img" aria-label="Go: 1.26+">
+  <title>Go: 1.26+</title>
+  <clipPath id="badge"><rect width="97" height="24" rx="4"/></clipPath>
+  <g clip-path="url(#badge)">
+    <path fill="#334155" d="M0 0h40v24H0z"/>
+    <path fill="#087f9a" d="M40 0h57v24H40z"/>
+  </g>
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,DejaVu Sans,sans-serif" font-size="11">
+    <text x="20" y="16">Go</text>
+    <text x="68.5" y="16">1.26+</text>
+  </g>
+</svg>

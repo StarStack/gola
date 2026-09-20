@@ -1,0 +1,21 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/starstack/gola
+cpu: Apple M5 Max
+BenchmarkGoLa/Static         	  303342	       392.3 ns/op	    1248 B/op	      14 allocs/op
+BenchmarkGoLa/Static         	  314070	       409.7 ns/op	    1248 B/op	      14 allocs/op
+BenchmarkGoLa/Static         	  322573	       390.4 ns/op	    1248 B/op	      14 allocs/op
+BenchmarkGoLa/Param          	  241590	       524.1 ns/op	    1632 B/op	      18 allocs/op
+BenchmarkGoLa/Param          	  228265	       517.0 ns/op	    1632 B/op	      18 allocs/op
+BenchmarkGoLa/Param          	  236869	       509.0 ns/op	    1632 B/op	      18 allocs/op
+BenchmarkGoLa/NotFound       	  293407	       424.2 ns/op	    1280 B/op	      14 allocs/op
+BenchmarkGoLa/NotFound       	  284823	       416.6 ns/op	    1280 B/op	      14 allocs/op
+BenchmarkGoLa/NotFound       	  304855	       415.7 ns/op	    1280 B/op	      14 allocs/op
+BenchmarkGoLa/JSON           	  251439	       478.9 ns/op	    1272 B/op	      14 allocs/op
+BenchmarkGoLa/JSON           	  253750	       481.1 ns/op	    1272 B/op	      14 allocs/op
+BenchmarkGoLa/JSON           	  256231	       476.4 ns/op	    1272 B/op	      14 allocs/op
+BenchmarkGoLa/Middleware     	  308356	       400.3 ns/op	    1248 B/op	      14 allocs/op
+BenchmarkGoLa/Middleware     	  315799	       405.3 ns/op	    1248 B/op	      14 allocs/op
+BenchmarkGoLa/Middleware     	  294309	       410.9 ns/op	    1248 B/op	      14 allocs/op
+PASS
+ok  	github.com/starstack/gola	2.298s

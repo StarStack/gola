@@ -1,0 +1,15 @@
+.DS_Store
+*.test
+coverage.out
+
+# Local requirements, implementation notes, reports and scratch files.
+/.local/
+
+# Prevent accidental reintroduction of the former internal-document locations.
+/GoLa_开发需求*.md
+/docs/requirements.md
+/docs/design.md
+/docs/progress.md
+/docs/verification.md
+/docs/*-integration.md
+/docs/results/
